@@ -1,0 +1,27 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "\u00e9CO2mix",
+                "description": "Configuration de l'int\u00e9gration \u00e9CO2mix",
+                "data": {
+                    "scan_interval": "Intervalle de mise \u00e0 jour (minutes)"
+                }
+            }
+        },
+        "abort": {
+            "single_instance_allowed": "D\u00e9j\u00e0 configur\u00e9. Une seule configuration possible."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Options \u00e9CO2mix",
+                "description": "Configurer l'intervalle de mise \u00e0 jour",
+                "data": {
+                    "scan_interval": "Intervalle de mise \u00e0 jour (minutes)"
+                }
+            }
+        }
+    }
+}
