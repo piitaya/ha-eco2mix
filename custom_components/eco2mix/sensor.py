@@ -1,7 +1,6 @@
 """Support for éCO2mix sensors."""
 
 from dataclasses import dataclass
-from datetime import datetime
 import logging
 from typing import Any
 
@@ -294,75 +293,3 @@ class Eco2mixBaseSensor(CoordinatorEntity[Eco2mixDataUpdateCoordinator], SensorE
             "model": "Integration Eco2Mix RTE via open data ODRE",
             "sw_version": "1.0.0",
         }
-
-
-class Eco2mixPowerSensor(Eco2mixBaseSensor):
-    """Sensor for power values (in kW)."""
-
-    def __init__(self, coordinator, sensor_type, name, icon):
-        """Initialize the power sensor."""
-        super().__init__(coordinator, sensor_type, name, icon)
-        self._attr_native_unit_of_measurement = UnitOfPower.MEGA_WATT
-        self._attr_device_class = SensorDeviceClass.POWER
-        self._attr_unit_of_measurement = UnitOfPower.MEGA_WATT
-
-    @property
-    def native_value(self) -> StateType:
-        """Return the state of the sensor."""
-        try:
-            value = self.coordinator.data[self._sensor_type]
-            return round(value, 2) if value is not None else None
-        except (KeyError, TypeError):
-            return None
-
-
-class Eco2mixPercentageSensor(Eco2mixBaseSensor):
-    """Sensor for percentage values."""
-
-    def __init__(self, coordinator, sensor_type, name, icon):
-        """Initialize the percentage sensor."""
-        super().__init__(coordinator, sensor_type, name, icon)
-        self._attr_native_unit_of_measurement = PERCENTAGE
-        self._attr_suggested_display_precision = 1
-
-    @property
-    def native_value(self) -> StateType:
-        """Return the state of the sensor."""
-        try:
-            value = self.coordinator.data[self._sensor_type]
-            return round(value, 1) if value is not None else None
-        except (KeyError, TypeError):
-            return None
-
-
-class Eco2mixLastUpdateSensor(Eco2mixBaseSensor):
-    """Sensor for last update timestamp."""
-
-    def __init__(self, coordinator, sensor_type, name, icon):
-        """Initialize the timestamp sensor."""
-        super().__init__(coordinator, sensor_type, name, icon)
-        self._attr_device_class = SensorDeviceClass.TIMESTAMP
-        self._attr_state_class = None
-        self._attr_native_unit_of_measurement = None
-
-    @property
-    def native_value(self) -> StateType:
-        """Return the state of the sensor."""
-        try:
-            timestamp_str = self.coordinator.data["timestamp"]
-            return datetime.fromisoformat(timestamp_str)
-        except (KeyError, TypeError, ValueError):
-            return None
-
-
-class Eco2mixAggregateSensor(Eco2mixPowerSensor):
-    """Sensor for aggregated renewable or low carbon production."""
-
-    @property
-    def native_value(self) -> StateType:
-        """Return the total production for renewable or low carbon sources."""
-        try:
-            value = self.coordinator.data[self._sensor_type]
-            return round(value, 2) if value is not None else None
-        except (KeyError, TypeError):
-            return None
